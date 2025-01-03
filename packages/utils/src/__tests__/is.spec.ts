@@ -14,7 +14,19 @@ import {
   isWorkerScope,
 } from '~/is'
 
+const Mock = vi.fn(() => ({
+  importScripts: vi.fn(),
+}))
+
 describe('is', () => {
+  beforeEach(() => {
+    vi.stubGlobal('WorkerGlobalScope', Mock)
+  })
+
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
   describe('isString', () => {
     it('should return true for strings', () => {
       expect(isString('')).toBe(true)
@@ -187,6 +199,7 @@ describe('is', () => {
       expect(isWorkerScope(globalThis)).toBe(false)
       expect(isWorkerScope({})).toBe(false)
       expect(isWorkerScope(null)).toBe(false)
+      expect(isWorkerScope(globalThis)).toBe(false)
     })
   })
 
