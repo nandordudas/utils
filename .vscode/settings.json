@@ -64,6 +64,7 @@
   "javascript.inlayHints.variableTypes.enabled": true,
   "javascript.updateImportsOnFileMove.enabled": "always",
 
+  "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.format.semicolons": "remove",
   "typescript.inlayHints.enumMemberValues.enabled": true,
   "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
@@ -75,7 +76,8 @@
   "typescript.preferences.importModuleSpecifierEnding": "minimal",
   "typescript.preferences.preferTypeOnlyAutoImports": true,
   "typescript.preferences.quoteStyle": "single",
-  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.tsc.autoDetect": "off",
+  "typescript.tsdk": "./node_modules/typescript/lib",
   "typescript.updateImportsOnFileMove.enabled": "always",
   // #endregion
 
