@@ -1,5 +1,6 @@
 const objectToString = Object.prototype.toString
 
-export function toString<T>(value: T): string /* @__PURE__ */ {
+/* @__NO_SIDE_EFFECTS__ */
+export function toString<T>(value: T): string {
   return objectToString.call(value)
 }

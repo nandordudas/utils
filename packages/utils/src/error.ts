@@ -42,10 +42,14 @@ export function raiseError(
   cause: unknown,
 ): never
 
+/* @__NO_SIDE_EFFECTS__ */
 export function raiseError(
   message: string,
   ErrorConstructor: Constructor<Error> = Error,
   cause?: unknown,
 ): never {
+  if (typeof message !== 'string')
+    throw new TypeError('Message must be a string')
+
   throw new ErrorConstructor(message, { cause })
 }

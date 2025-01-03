@@ -12,10 +12,11 @@ import type { TypedFn } from '~/types'
  * invoke(fn, 1, 2) // 3
  * invoke(fn, ...[1, 2]) // 3
  */
+/* @__NO_SIDE_EFFECTS__ */
 export function invoke<Args extends Parameters<TypedFn>, Return>(
   fn: TypedFn<Args, Return>,
   ...args: Args
-): Return /* @__PURE__ */ {
+): Return {
   return fn(...args)
 }
 
@@ -28,7 +29,8 @@ export function invoke<Args extends Parameters<TypedFn>, Return>(
  * await wait(1_000) // waits for 1 second
  * wait(1_000).then(() => console.log('waited for 1 second'))
  */
-export function wait(ms: number = 0): Promise<void> /* @__NO_SIDE_EFFECTS__ */ {
+/* @__NO_SIDE_EFFECTS__ */
+export function wait(ms: number = 0): Promise<void> {
   const { promise, resolve } = Promise.withResolvers<void>()
 
   if (ms <= 0)
@@ -47,6 +49,7 @@ export function wait(ms: number = 0): Promise<void> /* @__NO_SIDE_EFFECTS__ */ {
  * @example
  * Array.from([1, 2, 3]).map(identity) // [1, 2, 3]
  */
-export function identity<T>(value: T): T /* @__NO_SIDE_EFFECTS__ */ {
+/* @__PURE__ */
+export function identity<T>(value: T): T {
   return value
 }

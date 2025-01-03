@@ -5,7 +5,7 @@ type StrictPropertyCheck<T, K extends keyof T> = T & {
 }
 
 interface PropertyCheckOptions {
-  strict?: boolean
+  strict: boolean | undefined
 }
 
 /**
@@ -19,11 +19,12 @@ interface PropertyCheckOptions {
  * if (hasProperty(data, 'name', { strict: true }))
  *   data.name // type is never
  */
+/* @__PURE__ */
 export function hasProperty<T extends object, K extends keyof T>(
   obj: T,
   key: K,
-  options: PropertyCheckOptions = {},
-): obj is StrictPropertyCheck<T, K> /* @__PURE__ */ {
+  options: PropertyCheckOptions = { strict: false },
+): obj is StrictPropertyCheck<T, K> {
   const hasValidOwnership: boolean = Object.hasOwn(obj, key)
   const meetsStrictCheck: boolean = !options.strict || obj[key] !== undefined
 
@@ -41,11 +42,12 @@ export function hasProperty<T extends object, K extends keyof T>(
  * if (hasProperties(data, ['name', 'id'], { strict: true }))
  *   data.name // type is undefined
  */
+/* @__PURE__ */
 export function hasProperties<T extends object, K extends keyof T>(
   obj: T,
   keys: K[],
   options?: PropertyCheckOptions,
-): obj is StrictPropertyCheck<T, K> /* @__PURE__ */ {
+): obj is StrictPropertyCheck<T, K> {
   return keys.every(key => hasProperty(obj, key, options))
 }
 
@@ -59,11 +61,12 @@ export function hasProperties<T extends object, K extends keyof T>(
  * const data = { id: 1, name: undefined }
  * getProperty(data, 'name', { strict: true }) // type is undefined
  */
+/* @__NO_SIDE_EFFECTS__ */
 export function getProperty<T extends object, K extends keyof T>(
   obj: T,
   key: K,
   options?: PropertyCheckOptions,
-): StrictPropertyCheck<T, K>[K] | undefined /* @__PURE__ */ {
+): StrictPropertyCheck<T, K>[K] | undefined {
   return hasProperty(obj, key, options)
     ? obj[key]
     : undefined

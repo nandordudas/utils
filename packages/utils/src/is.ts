@@ -9,7 +9,8 @@ import { hasProperty } from '~/object'
  * const value: unknown = 'hello'
  * isString(value) // value is narrowed to string
  */
-export function isString(value: unknown): value is string /* @__PURE__ */ {
+/* @__PURE__ */
+export function isString(value: unknown): value is string {
   return typeof value === 'string'
 }
 
@@ -21,7 +22,8 @@ export function isString(value: unknown): value is string /* @__PURE__ */ {
  * const value: unknown = 42
  * isNumber(value) // value is narrowed to number
  */
-export function isNumber(value: unknown): value is number /* @__PURE__ */ {
+/* @__PURE__ */
+export function isNumber(value: unknown): value is number {
   return typeof value === 'number' && !Number.isNaN(value)
 }
 
@@ -33,7 +35,8 @@ export function isNumber(value: unknown): value is number /* @__PURE__ */ {
  * const value: unknown = Symbol('hello')
  * isSymbol(value) // value is narrowed to symbol
  */
-export function isSymbol(value: unknown): value is symbol /* @__PURE__ */ {
+/* @__PURE__ */
+export function isSymbol(value: unknown): value is symbol {
   return typeof value === 'symbol'
 }
 
@@ -45,7 +48,8 @@ export function isSymbol(value: unknown): value is symbol /* @__PURE__ */ {
  * const value: unknown = 'hello'
  * isPropertyKey(value) // value is narrowed to PropertyKey
  */
-export function isPropertyKey(value: unknown): value is PropertyKey /* @__PURE__ */ {
+/* @__PURE__ */
+export function isPropertyKey(value: unknown): value is PropertyKey {
   return (
     isString(value)
     || isNumber(value)
@@ -61,7 +65,8 @@ export function isPropertyKey(value: unknown): value is PropertyKey /* @__PURE__
  * const value: unknown = 42n
  * isBigInt(value) // value is narrowed to bigint
  */
-export function isBigInt(value: unknown): value is bigint /* @__PURE__ */ {
+/* @__PURE__ */
+export function isBigInt(value: unknown): value is bigint {
   return typeof value === 'bigint'
 }
 
@@ -73,7 +78,8 @@ export function isBigInt(value: unknown): value is bigint /* @__PURE__ */ {
  * const value: unknown = true
  * isBoolean(value) // value is narrowed to boolean
  */
-export function isBoolean(value: unknown): value is boolean /* @__PURE__ */ {
+/* @__PURE__ */
+export function isBoolean(value: unknown): value is boolean {
   return typeof value === 'boolean'
 }
 
@@ -85,7 +91,8 @@ export function isBoolean(value: unknown): value is boolean /* @__PURE__ */ {
  * const value: unknown = undefined
  * isUndefined(value) // value is narrowed to undefined
  */
-export function isUndefined(value: unknown): value is undefined /* @__PURE__ */ {
+/* @__PURE__ */
+export function isUndefined(value: unknown): value is undefined {
   return typeof value === 'undefined'
 }
 
@@ -97,7 +104,8 @@ export function isUndefined(value: unknown): value is undefined /* @__PURE__ */ 
  * const value: unknown = null
  * isNull(value) // value is narrowed to null
  */
-export function isNull(value: unknown): value is null /* @__PURE__ */ {
+/* @__PURE__ */
+export function isNull(value: unknown): value is null {
   return value === null
 }
 
@@ -109,7 +117,8 @@ export function isNull(value: unknown): value is null /* @__PURE__ */ {
  * const value: unknown = 'hello'
  * isPrimitive(value) // value is narrowed to Primitive
  */
-export function isPrimitive(value: unknown): value is Primitive /* @__PURE__ */ {
+/* @__PURE__ */
+export function isPrimitive(value: unknown): value is Primitive {
   return (
     isPropertyKey(value)
     || isBoolean(value)
@@ -127,7 +136,8 @@ export function isPrimitive(value: unknown): value is Primitive /* @__PURE__ */ 
  * const value: unknown = {}
  * isObject(value) // value is narrowed to object
  */
-export function isObject(value: unknown): value is object /* @__PURE__ */ {
+/* @__PURE__ */
+export function isObject(value: unknown): value is object {
   return value !== null && typeof value === 'object'
 }
 
@@ -138,10 +148,11 @@ export function isObject(value: unknown): value is object /* @__PURE__ */ {
  * @param constructor Constructor to check against
  * @returns `value` is an instance of `constructor`
  */
+/* @__PURE__ */
 export function isInstanceOf<T extends new (...args: any[]) => any>(
   value: unknown,
   constructor: T,
-): value is InstanceType<T> /* @__PURE__ */ {
+): value is InstanceType<T> {
   return value instanceof constructor
 }
 
@@ -155,17 +166,20 @@ export function isInstanceOf<T extends new (...args: any[]) => any>(
  * if (isWorkerScope(scope))
  *   scope.postMessage('hello')
  */
-export function isWorkerScope(scope: unknown): scope is WorkerGlobalScope & typeof globalThis /* @__PURE__ */ {
+/* @__PURE__ */
+export function isWorkerScope(scope: unknown): scope is WorkerGlobalScope & typeof globalThis {
   return (
-    !isUndefined(WorkerGlobalScope)
+    'WorkerGlobalScope' in globalThis
+    && !isUndefined(WorkerGlobalScope)
     && isInstanceOf(scope, WorkerGlobalScope)
     && hasProperty(scope, 'importScripts')
   )
 }
 
-export function isSharedArrayBufferSupported(): boolean /* @__NO_SIDE_EFFECTS__ */ {
+/* @__NO_SIDE_EFFECTS__ */
+export function isSharedArrayBufferSupported(): boolean {
   return (
-    crossOriginIsolated
+    'crossOriginIsolated' in globalThis
     && !isUndefined(SharedArrayBuffer)
   )
 }

@@ -49,11 +49,12 @@ export function assert(
   // [INFO] cause parameter could be added in the future, ESLint rule need to be updated
 ): asserts condition
 
+/* @__NO_SIDE_EFFECTS__ */
 export function assert(
   condition: unknown,
   message: string = 'Assertion failed',
   ErrorConstructor: Constructor<Error> = Error,
-): asserts condition /* @__NO_SIDE_EFFECTS__ */ {
+): asserts condition {
   if (!condition)
     raiseError(message, ErrorConstructor)
 }
@@ -94,12 +95,17 @@ export function assertType<T>(
   ErrorConstructor: Constructor<TypeError>,
 ): asserts value is T
 
+/* @__NO_SIDE_EFFECTS__ */
 export function assertType<T>(
   value: unknown,
   guard: TypePredicate<T>,
   ErrorConstructor: Constructor<TypeError> = TypeError,
 ): asserts value is T {
-  assert(guard(value), `Invalid type: ${typeof value}`, ErrorConstructor)
+  assert(
+    guard(value),
+    `Expected value to satisfy type predicate, but got ${typeof value}`,
+    ErrorConstructor,
+  )
 }
 
 /**
@@ -115,11 +121,12 @@ export function assertType<T>(
  * recoverType(value, typeof value === 'number', 0)
  * value.toFixed() // value is narrowed to number
  */
+/* @__PURE__ */
 export function recoverType<T, F>(
   value: unknown,
   guard: TypePredicate<T>,
   fallback: F extends T ? F : never,
-): T | F /* @__PURE__ */ {
+): T | F {
   try {
     assertType(value, guard)
 

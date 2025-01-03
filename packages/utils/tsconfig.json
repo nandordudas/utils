@@ -13,6 +13,9 @@
         "./src/*"
       ]
     },
+    "types": [
+      "vitest/globals"
+    ],
     "strict": true,
     "noImplicitReturns": true,
     "noUncheckedIndexedAccess": true,

@@ -3,4 +3,5 @@
  * @example
  * noop() // does nothing
  */
-export function noop(): void /* @__PURE__ */ { }
+/* @__PURE__ */
+export function noop(): void { }

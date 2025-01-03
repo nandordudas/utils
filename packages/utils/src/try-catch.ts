@@ -32,7 +32,8 @@ export type Result<T, E = Error> = Success<T> | Failure<E>
  * isSuccess({ ok: true, value: 42 }) // true
  * isSuccess({ ok: false, error: new Error('foo') }) // false
  */
-export function isSuccess<T>(result: Result<T>): result is Success<T> /* @__PURE__ */ {
+/* @__PURE__ */
+export function isSuccess<T>(result: Result<T>): result is Success<T> {
   return result.ok === true
 }
 
@@ -45,7 +46,8 @@ export function isSuccess<T>(result: Result<T>): result is Success<T> /* @__PURE
  * isFailure({ ok: true, value: 42 }) // false
  * isFailure({ ok: false, error: new Error('foo') }) // true
  */
-export function isFailure<E>(result: Result<unknown, E>): result is Failure<E> /* @__PURE__ */ {
+/* @__PURE__ */
+export function isFailure<E>(result: Result<unknown, E>): result is Failure<E> {
   return result.ok === false
 }
 
@@ -80,10 +82,11 @@ interface ResultPatterns<T, E, R> {
  *   failure: error => error, // Error
  * })
  */
+/* @__PURE__ */
 export function matchResult<T, E, R>(
   result: Result<T, E>,
   patterns: ResultPatterns<T, E, R>,
-): R /* @__PURE__ */ {
+): R {
   if (!patterns.success || !patterns.failure)
     raiseError('Unhandled cases', ResultMatchError)
 
@@ -92,14 +95,16 @@ export function matchResult<T, E, R>(
     : patterns.failure(result.error)
 }
 
-function createSuccess<T>(value: T): Success<T> /* @__PURE__ */ {
+/* @__PURE__ */
+function createSuccess<T>(value: T): Success<T> {
   return {
     ok: true,
     value,
   }
 }
 
-function createFailure<E>(error: E): Failure<E> /* @__PURE__ */ {
+/* @__PURE__ */
+function createFailure<E>(error: E): Failure<E> {
   return {
     ok: false,
     error,
@@ -117,7 +122,7 @@ function createFailure<E>(error: E): Failure<E> /* @__PURE__ */ {
  * tryCatch(() => Promise.resolve(42)) // { ok: true, value: 42 }
  * tryCatch(() => Promise.reject(new Error('foo'))) // { ok: false, error: Error: foo }
  */
-export function tryCatch<T, E = Error>(fn: TypedFn<[], T | Promise<T>>): Promise<Result<T, E>>
+export function tryCatch<T, E = Error>(fn: TypedFn<[], Promise<T>>): Promise<Result<T, E>>
 
 /**
  * Wraps a sync function in a try-catch block.
@@ -130,9 +135,10 @@ export function tryCatch<T, E = Error>(fn: TypedFn<[], T | Promise<T>>): Promise
  */
 export function tryCatch<T, E = Error>(fn: TypedFn<[], T>): Result<T, E>
 
+/* @__NO_SIDE_EFFECTS__ */
 export function tryCatch<T, E = Error>(
   fn: TypedFn<[], T | Promise<T>>,
-): Result<T, E> | Promise<Result<T, E>> /* @__NO_SIDE_EFFECTS__ */ {
+): Result<T, E> | Promise<Result<T, E>> {
   try {
     const result: T | Promise<T> = fn()
 
@@ -156,6 +162,7 @@ export function tryCatch<T, E = Error>(
  * getOrElse(createSuccess(42), 0) // 42
  * getOrElse(createFailure(new Error('foo')), 0) // 0
  */
+/* @__NO_SIDE_EFFECTS__ */
 export function getOrElse<T, E>(
   result: Result<T, E>,
   defaultValue: T,
@@ -177,6 +184,7 @@ export function getOrElse<T, E>(
  * chain(createSuccess(42), value => createSuccess(value + 1)) // { ok: true, value: 43 }
  * chain(createFailure(new Error('foo')), value => createSuccess(value + 1)) // { ok: false, error: Error: foo }
  */
+/* @__NO_SIDE_EFFECTS__ */
 export function chain<T, U, E>(
   result: Result<T, E>,
   fn: (value: T) => Result<U, E>,
