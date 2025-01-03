@@ -2,7 +2,7 @@
   "name": "@nandordudas/utils",
   "type": "module",
   "version": "0.0.1",
-  "packageManager": "pnpm@9.15.1",
+  "packageManager": "pnpm@9.15.2",
   "description": "Opinionated utility functions for TypeScript",
   "author": "Nándor Dudás <nandor.dudas@gmail.com>",
   "license": "MIT",
