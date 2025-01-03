@@ -32,7 +32,7 @@
     "build:prod": "pnpm run build --env.NODE_ENV production",
     "build": "tsup --config .config/tsup.ts",
     "check-exports": "attw --pack . --ignore-rules=cjs-resolves-to-esm",
-    "typecheck": "tsc --noEmit && vitest run --typecheck",
+    "typecheck": "tsc --noEmit && pnpm run test --typecheck",
     "prepack": "pnpm build:prod",
     "test": "vitest --config ./.config/vitest.ts",
     "test:coverage": "pnpm run test --coverage",
