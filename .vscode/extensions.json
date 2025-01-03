@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "antfu.goto-alias",
+    "antfu.pnpm-catalog-lens",
+    "dbaeumer.vscode-eslint",
+    "eamodio.gitlens",
+    "orta.vscode-twoslash-queries",
+    "streetsidesoftware.code-spell-checker",
+    "usernamehw.errorlens",
+    "yoavbls.pretty-ts-errors"
+  ]
+}
