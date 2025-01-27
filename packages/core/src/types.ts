@@ -63,7 +63,10 @@ export function raiseError(
   throw new ErrorConstructor(message, { cause })
 }
 
-export function assertIsFunction(value: unknown, ...args: Parameters<typeof raiseError>): asserts value is AnyFunction {
+export function assertIsFunction(
+  value: unknown,
+  ...args: Parameters<typeof raiseError>
+): asserts value is AnyFunction {
   if (!isFunction(value))
     raiseError(...args)
 }
@@ -81,11 +84,11 @@ const successBrand = Symbol('success')
 const failureBrand = Symbol('failure')
 
 export type Success<T> = BrandedType<{ value: T }, 'success'> & {
-  [successBrand]: true
+  readonly [successBrand]: true
 }
 
 export type Failure<E extends Error> = BrandedType<{ error: E }, 'failure'> & {
-  [failureBrand]: true
+  readonly [failureBrand]: true
 }
 
 export type Result<T, E extends Error = Error> = Either<Success<T>, Failure<E>>
@@ -130,6 +133,31 @@ function normalizeError(value: unknown): Error {
 
   return new Error(String(value))
 }
-// #endregin
 
-const _result = tryCatch(() => JSON.parse('{"foo": "bar"}'))
+interface Handlers<T, E extends Error, R> {
+  readonly success: (value: T) => R
+  readonly failure: (error: E) => void
+}
+
+export function match<T, E extends Error, R>(
+  result: Result<T, E>,
+  handlers: Handlers<T, E, R>
+): R | void
+
+export function match<T, E extends Error, R>(
+  promise: Promise<Result<T, E>>,
+  handlers: Handlers<T, E, R>
+): Promise<R | void>
+
+export function match<T, E extends Error, R>(
+  result: Awaitable<Result<T, E>>,
+  handlers: Handlers<T, E, R>,
+): Awaitable<R | void> {
+  if (isPromise(result))
+    return result.then(resolved => match(resolved, handlers))
+
+  return isSuccess(result)
+    ? handlers.success(result.value)
+    : handlers.failure(result.error)
+}
+// #endregion
