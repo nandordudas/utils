@@ -1,0 +1,6 @@
+packages:
+  - packages/*
+catalog:
+  '@antfu/eslint-config': latest
+  eslint: latest
+  jiti: latest

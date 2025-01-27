@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "antfu.pnpm-catalog-lens",
+    "dbaeumer.vscode-eslint",
+    "orta.vscode-twoslash-queries",
+    "streetsidesoftware.code-spell-checker",
+    "usernamehw.errorlens",
+    "yoavbls.pretty-ts-errors"
+  ]
+}
