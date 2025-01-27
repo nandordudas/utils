@@ -110,9 +110,9 @@ export function failure<E extends Error>(error: E): Failure<E> {
   return { _kind: 'failure', [failureBrand]: true, error }
 }
 
-export function tryCatch<T>(fn: () => T): Result<T, Error>
-export function tryCatch<T>(fn: () => Promise<T>): Promise<Result<T, Error>>
-export function tryCatch<T>(fn: () => Awaitable<T>): Awaitable<Result<T, Error>> {
+export function tryCatch<const T>(fn: () => T): Result<T, Error>
+export function tryCatch<const T>(fn: () => Promise<T>): Promise<Result<T, Error>>
+export function tryCatch<const T>(fn: () => Awaitable<T>): Awaitable<Result<T, Error>> {
   assertIsFunction(fn, 'fn function must be a function', TypeError)
 
   try {
@@ -139,25 +139,34 @@ interface Handlers<T, E extends Error, R> {
   readonly failure: (error: E) => void
 }
 
-export function match<T, E extends Error, R>(
-  result: Result<T, E>,
-  handlers: Handlers<T, E, R>
+export function match<const T, E extends Error, R>(
+  result: Result<T, Error>,
+  handlers: Handlers<T, E, R>,
 ): R | void
 
-export function match<T, E extends Error, R>(
-  promise: Promise<Result<T, E>>,
-  handlers: Handlers<T, E, R>
+export function match<const T, E extends Error, R>(
+  result: Promise<Result<T, E>>,
+  handlers: Handlers<T, E, R>,
 ): Promise<R | void>
 
-export function match<T, E extends Error, R>(
+export async function match<const T, E extends Error, R>(
   result: Awaitable<Result<T, E>>,
-  handlers: Handlers<T, E, R>,
-): Awaitable<R | void> {
+  _handlers: Handlers<T, E, R>,
+) {
   if (isPromise(result))
-    return result.then(resolved => match(resolved, handlers))
+    return console.log('isPromise', await result) // eslint-disable-line no-console
 
-  return isSuccess(result)
-    ? handlers.success(result.value)
-    : handlers.failure(result.error)
+  if (isSuccess(result))
+    return console.log('isSuccess') // eslint-disable-line no-console
+
+  return console.log('fallback') // eslint-disable-line no-console
 }
 // #endregion
+
+const _asyncResult = tryCatch(() => Promise.resolve<{ foo: string }>(JSON.parse('{"foo": "bar"}')))
+const _result = tryCatch(() => JSON.parse('{"foo": "bar"}') as { foo: string })
+
+const _output = match(_asyncResult, {
+  success: identity,
+  failure: noop,
+})
