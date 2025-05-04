@@ -21,3 +21,14 @@ export type ErrorConstructor = new (...args: any[]) => Error
 export type DeepReadonly<T> = {
   readonly [P in keyof T]: keyof T[P] extends never ? T[P] : DeepReadonly<T[P]>
 }
+
+export type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends (infer U)[]
+    ? DeepPartial<U>[]
+    : T[P] extends object
+      ? DeepPartial<T[P]>
+      : T[P]
+}
+
+export type StrictOmit<T, K extends keyof T> = Omit<T, K>
+export type StrictPick<T, K extends keyof T> = Pick<T, K>

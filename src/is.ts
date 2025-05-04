@@ -108,3 +108,11 @@ export function isDate(value: unknown): value is Date {
 export function isRegExp(value: unknown): value is RegExp {
   return value instanceof RegExp
 }
+
+export function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return isObject(value) && Object.getPrototypeOf(value) === Object.prototype
+}
+
+export function isFiniteNumber(value: unknown): value is number {
+  return isNumber(value) && Number.isFinite(value)
+}

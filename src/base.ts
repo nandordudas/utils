@@ -19,17 +19,17 @@ abstract class BaseError extends Error {
   }
 }
 
-export class AssertionError extends BaseError {}
+export class AssertionError extends BaseError {
+  static assert<TError extends ErrorConstructor>(
+    condition: boolean | (() => boolean),
+    ErrorOrConstructor: TError,
+    ...args: ConstructorParameters<TError>
+  ): asserts condition {
+    const result = isFunction(condition) ? condition() : condition
 
-export function assert<TError extends ErrorConstructor>(
-  condition: boolean | (() => boolean),
-  ErrorOrConstructor: TError,
-  ...args: ConstructorParameters<TError>
-): asserts condition {
-  const result = isFunction(condition) ? condition() : condition
-
-  if (!result)
-    raiseError(ErrorOrConstructor, ...args)
+    if (!result)
+      raiseError(ErrorOrConstructor, ...args)
+  }
 }
 
 export class NotImplementedError extends Error {

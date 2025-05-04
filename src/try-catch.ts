@@ -1,7 +1,7 @@
 import type { Brand, UnknownRecord } from './types'
 import { raiseError } from './base'
-import { isError, isObject, isPromise, isString } from './is'
 import { deepFreeze } from './function'
+import { isError, isObject, isPromise, isString } from './is'
 
 export type ResultError = Brand<'ResultError', Error>
 
@@ -95,6 +95,26 @@ export function match<T, E extends ResultError, R>(
   return isSuccess(result)
     ? onSuccess(result.value)
     : onFailure(result.error)
+}
+
+export function tap<T, E extends ResultError>(
+  result: Result<T, E>,
+  fn: (value: T) => void,
+): Result<T, E> {
+  if (isSuccess(result))
+    fn(result.value)
+
+  return result
+}
+
+export async function tapAsync<T, E extends ResultError>(
+  result: Result<T, E>,
+  fn: (value: T) => Promise<void>,
+): Promise<Result<T, E>> {
+  if (isSuccess(result))
+    await fn(result.value)
+
+  return result
 }
 
 export function getOrDefault<T, E extends ResultError>(

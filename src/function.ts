@@ -5,6 +5,10 @@ export function invoke<T>(fn: () => T): T {
   return fn()
 }
 
+export function invokeAsync<T>(fn: () => Promise<T>): Promise<T> {
+  return fn()
+}
+
 export function toArray<T>(array?: Nullable<Arrayable<T>>): Array<T> {
   array ??= []
 
@@ -28,3 +32,5 @@ export function deepFreeze<T>(value: T): DeepReadonly<T> {
 
   return value
 }
+
+// [TODO] curry, compose, debounce, throttle
