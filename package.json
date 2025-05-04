@@ -1,0 +1,34 @@
+{
+  "name": "@nandordudas/utils",
+  "type": "module",
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.10.0",
+  "description": "Collection of common TypeScript utils",
+  "author": "Nandor Dudas <nandor.dudas@gmail.com>",
+  "license": "MIT",
+  "sideEffects": false,
+  "exports": {
+    ".": "./dist/index.mjs"
+  },
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.mts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "dev": "unbuild --stub",
+    "lint:fix": "pnpm lint --fix",
+    "lint": "eslint --cache --config .config/eslint.ts",
+    "start": "tsx src/index.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "catalog:",
+    "eslint": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "unbuild": "catalog:"
+  }
+}
